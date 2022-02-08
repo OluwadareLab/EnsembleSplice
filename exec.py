@@ -68,6 +68,8 @@ def main():
     if type(args.imbal) != bool:
         assert 0.1<=(args.imbal)<1.0,'The value of --imbal must be a fraction and greater than or equal to 0.1.'
     datasets = list(filter(lambda dataset: dataset != '', [args.nn269, args.ce, args.hs3d, args.hs2, args.ce2, args.oy, args.ar, args.dm]))
+    if args.combine:
+        datasets = ['combine']
     if type(args.all_ds)==str:
         assert len(datasets)==0,'You are using all datasets, dont specify other datasets.'
         datasets = ['nn269', 'ce', 'hs3d', 'hs2', 'ce2', 'oy', 'ar', 'dm']
@@ -77,12 +79,12 @@ def main():
             'nn269':90, 'ce':141,
             'hs3d':140, 'hs2':602,
             'ce2':602, 'dm':602,
-            'ar':602, 'or':602,},
+            'ar':602, 'or':602,'combine':602,},
         'donor':{
             'nn269':15, 'ce':141,
             'hs3d':140, 'hs2':602,
             'ce2':602, 'dm':602,
-            'ar':602, 'or':602,}
+            'ar':602, 'or':602,'combine':602,}
     }
     # model asserts
     assert (args.train+args.test+args.val)==1,'You should choose between doing model validation, model training and saving, and testing.'

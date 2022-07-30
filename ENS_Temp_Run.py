@@ -1,3 +1,7 @@
+# This program analyzes the results in each log file produces by running EnsembleSplice 
+# Once the log file is produced from training or validating or testing, put the log file 
+# in a new folder containing this program, and then run this program.
+
 import ast
 import numpy as np
 import os

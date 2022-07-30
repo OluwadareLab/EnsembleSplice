@@ -4,8 +4,6 @@
 # -----------------------------------------------------------------------------
 from Data import encode_data
 from Models import sub_models
-from Visuals import make_report
-
 
 from datetime import datetime
 import numpy as np

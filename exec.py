@@ -16,7 +16,7 @@ def main():
     # dataset options
     d_opts = parser.add_argument_group('Dataset Options')
     # NN269, CE, HS3D, Homo Sapiens, Caenorhabditis elegans, Oryza Sativa japonica, Arabidopsis thaliana, Drosophila melanogaster
-    for d_set in ["nn269", "ce", "hs3d", "hs2", "ce2", "oy", "ar", "dm"]:
+    for d_set in ["nn269", "ce", "hs3d", "hs3d_bal","hs2", "ce2", "oy", "ar", "dm"]:
         d_opts.add_argument(f"--{d_set}", action='store_const', const=f'{d_set}', default='', help=f'Use this to choose the {d_set.upper()} dataset.')
     d_opts.add_argument("--all_ds", action='store_const',  const='all_ds', default=False, help='Run on every available dataset individually (not combined)')
 
@@ -25,6 +25,8 @@ def main():
     for name, number in {"cnn":4, "dnn":4}.items():
         for _ in range(1, number+1):
             m_opts.add_argument(f'--{name}{str(_)}', nargs='?', type=int, const=1, default=0, help=f'Use this to choose the {name.upper()}{str(_)} architecture.')
+    m_opts.add_argument(f'--sfinder', nargs='?', type=int, const=1, default=0, help=f'Use this to choose the SpliceFinder (benchmark network) architecture.')
+    m_opts.add_argument(f'--dsplice', nargs='?', type=int, const=1, default=0, help=f'Use this to choose the DeepSplicer (benchmark network) architecture.')
     m_opts.add_argument('--all_models', action='store_const', const='all_m', default=False, help='Use this to choose all model architectures.')
     m_opts.add_argument('--report', action='store_true', default=False, help='Generate a report of the results for the given paradigm.')
     m_opts.add_argument('--validate', action='store_true', default=False, help='Perform validation training.')
@@ -32,6 +34,8 @@ def main():
     m_opts.add_argument('--train', action='store_true', default=False, help='Perform training and saving.')
     m_opts.add_argument("--esplice", action='store_true', default=False, help='Use EnsembleSplice on the sub-models')
     m_opts.add_argument("--tune", action='store_true', default=False, help='Tune sub-models')
+    
+    
 
     # splice site options
     s_opts = parser.add_argument_group('Splice Site Options')
@@ -54,12 +58,12 @@ def main():
         sys.exit(0)
 
     # collect all datasets given by the user
-    datasets = list(filter(lambda dataset: dataset != '', [args.nn269, args.ce, args.hs3d, args.hs2, args.ce2, args.oy, args.ar, args.dm]))
+    datasets = list(filter(lambda dataset: dataset != '', [args.nn269, args.ce, args.hs3d, args.hs3d_bal, args.hs2, args.ce2, args.oy, args.ar, args.dm]))
 
     # check if the all-datasets option is being used, and command user not to write all_ds and other datasets
     if type(args.all_ds)==str:
         assert len(datasets)==0,'You are using all datasets, don\'t specify other datasets.'
-        datasets = ['nn269', 'ce', 'hs3d', 'hs2', 'ce2', 'oy', 'ar', 'dm']
+        datasets = ['nn269', 'ce', 'hs3d', "hs3d_bal",'hs2', 'ce2', 'oy', 'ar', 'dm']
 
     # make sure at least 1 dataset is being used
     assert len(datasets)>=1,'You have not chosen a dataset to use.'
@@ -71,7 +75,8 @@ def main():
     # a list of available sub-networks to use for ensembling
     sub_models = [
         ('cnn1', args.cnn1),('cnn2', args.cnn2),('cnn3',args.cnn3),('cnn4',args.cnn4),
-        ('dnn1', args.dnn1),('dnn2', args.dnn2),('dnn3',args.dnn3),('dnn4',args.dnn4)
+        ('dnn1', args.dnn1),('dnn2', args.dnn2),('dnn3',args.dnn3),('dnn4',args.dnn4),
+        ('sfinder', args.sfinder), ('dsplice', args.dsplice)
     ]
 
     # make sure if user specifies all models
@@ -105,8 +110,6 @@ def main():
         print(f"{operation[0][1].upper()} with EnsembleSplice, using {sub_models} on {splice_sites} data from {datasets}\n")
     else:
         print(f"{operation[0][1].upper()} {sub_models} on {splice_sites} data from {datasets}\n")
-
-    #-------
 
     # run ensemble splice
     ensemblesplice.run(

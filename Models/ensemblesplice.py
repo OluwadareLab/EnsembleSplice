@@ -5,7 +5,6 @@
 from Data import encode_data
 from Models import sub_models
 from Visuals import make_report
-from Utils import plotting
 
 
 from datetime import datetime
@@ -292,8 +291,11 @@ def train(encoded_datasets, results_table, models, kwargs, log_file, graph_folde
                 trained_model.save(os.getcwd()+f'/Models/TrainedModels/{trained_models}_{m}_{ds}_{ss}')
                 # add a list of length equal to the number of epochs to the metric
                 train_metrics = list(filter(lambda elt: "val" not in elt, list(METRICS.keys())))
-                for metric in train_metrics:
-                    results_table[ds][ss][m][metric].append(model_history.history[metric])
+                if m != "sfinder" and m != "dsplice":
+                    for metric in train_metrics:
+                        results_table[ds][ss][m][metric].append(model_history.history[metric])
+                if m == "sfinder" or m == "dsplice":
+                    results_table[ds][ss][m]["bin_acc"].append(model_history.history["bin_acc"])
 
                 # write the results to the log file
                 with open(log_file, 'a') as f:
@@ -326,6 +328,14 @@ def test(encoded_datasets, results_table, models, kwargs, log_file):
                 loaded_model = tf.keras.models.load_model(
                     os.getcwd()+f'/Models/TrainedModels/{trained_models}_{m}_{ds}_{ss}/'
                 )
+                if m == 'sfinder':
+                    history = loaded_model.evaluate(X_test, y_test)
+                    print(history)
+
+                if m == 'dsplice':
+                    history = loaded_model.evaluate(X_test, y_test)
+                    print(history)
+                    
                 if kwargs['ensemble']:
                     tst_X = X_test.astype("float")
                     tst_preds = loaded_model.predict(
@@ -404,6 +414,8 @@ def run(**kwargs):
         'dnn3': sub_models.DNN03(),
         'dnn4': sub_models.DNN04(),
         'ensemble': sub_models.ENSEMBLE(),
+        'sfinder': sub_models.SpliceFinder(),
+        'dsplice': sub_models.DeepSplicer(),
         # 'ens': Ensemble(),
     }
 
@@ -452,177 +464,3 @@ def run(**kwargs):
             f.write(str(results_table))
             f.close()
 
-
-    # Check metrics (tp fp etc...)
-    # Get Errors bars with Labels
-    # Get times new roman in Google Colab
-    # Make graphs look pretty
-    # Sort out the ensembling [[0.5, 0.4], [0.5, 0.4], [0.5, 0.4]] --> [1 0] --> 1
-    # Save ensemble predictions to check correlation
-    # Get latex tables to work with markdown [pandoc]
-
-    # Log Results (how to keep this lightweight and reusable?)
-    # Read Log Results and Make Graphs from them <-- make all the graphs using the training
-    # Make the graphs look very nice, include box and whiskers plots,
-    # Save the graphs to a specific folder, by run
-    # Avgerage out the various donnor+acceptor performance to
-    # Get errors bars and label
-
-    # 1. Debug the plotting file
-    # 2. Test graph xticks, yticks, and font
-    # 3. Make the graphs w/ labels above the bars (box + whisk as well)
-
-    # w/ err bars + label, for HS3D, don, acc, acc+don || for HS3D+AR+ , don, acc, acc+don
-    # Avg. fold acc  Avg. fold acc  Avg. fold acc
-    # CNN1           CNN2           ENS
-
-    # (manual, w/ error bars + label) for HS3D, don, acc, acc+don || for HS3D+AR+ , don, acc, acc+don
-    # Avg. fold acc  Avg. fold acc  Avg. fold acc
-    # ENS1           ENS2           ENS3
-
-    # Standardize tuned sub-models (look at difference between DNN1,2,3 etc...)
-    # Think about acc and don models separately
-    # Think about model iterations (multiple of same)
-    # Resolve CNN4 conflict
-    # Fix Visuals folder name
-    # Think about standardized epochs
-    # Think about hpyerparam tuning (should you step back from this)
-    # Streamline the splitting up of the datasets (subsets)
-    # Renaming new submodels
-    # Same number of false negatives as false positives?
-    # Using sigmoid with 2 neurons instead of softmax makes TP and TN work
-    # Sort out the false positives and false negatives thing
-    # Use multiple ensemble test settings (correlation between training and validation)
-    # Keep it at 7 different combinations (diversity tab, accuracy, etc... table)
-    # Maybe use double fault measures
-    # Remove CNN5 CNN4 (pick random ensemble than highly diverse)
-    # Get rid of CNN4 / CNN5, change CNN1 to 1D layers
-    # Difficulty Correlation coef. Q-Statistic EnsAccuracy
-    # Remove NAN values from runs
-
-    # GET GRAPHS OF RESULTS
-
-    # ensemblesplice.run(
-    #     ensemble=args.esplice,
-    #     sub_models=sub_models,
-    #     datasets=datasets,
-    #     splice_sites=splice_sites,
-    #     operation=operation[0][1],
-    #     folds=args.k,
-    #     report=args.report,
-    # )
-
-
-    # validated
-    # for ds in datasets:
-    #     for ss in splice_sites:
-    #         for fold in encode_data[ds][ss]['1D']:
-    #             for model in correct_mdoels
-    #                 resuls = model.build(fold_test, fold_train)
-    #                 add_to_file+add_to_dict
-    #
-    #         for fold in encode_data[ds][ss]['2D']:
-    #             for model in correct_mdoels
-    #                 resuls = model.build(fold_test, fold_train)
-    #                 add_to_file+add_to_dict
-
-
-    # if kwargs["operation"] == "validate":
-    #     results_table = validate(
-    #         kwargs,
-    #         encoded_datasets,
-    #         results_table,
-    #     )
-    # if kwargs["operation"] == "train":
-    #     results_table = train(
-    #         kwargs,
-    #         encoded_datasets,
-    #         results_table,
-    #     )
-    # if kwargs["operation"] == "test":
-    #     results_table = ensemble_test(
-    #         kwargs,
-    #         encoded_datasets,
-    #         results_table,
-    #     )
-    #
-
-
-# USE EVALUATE TO GET THE FINAL VALIDATION AND TRAINING METRICS
-# predictions = trained_model.predict(X_trn)
-# count = 0
-# for i, pred in enumerate(predictions):
-#     # look for false positives
-#     if (np.argmax(np.asarray(y_trn.tolist()[i]).reshape(-1,1))==1) and (np.argmax(pred.reshape(-1,1))==0):
-#         count+=1
-# print(count)
-
-# 'sen':[], # Sensitivity
-# 'spe':[], # Specificity
-# 'mcc':[], # MCC
-# 'f1':[], # F1 Score
-# 'trn_err':[], # Training error rate
-# 'val_err':[], # Validation error rate,
-# 'tst_err':[], # Test error
-
-
-# if you validate
-# you want to see the performance of each sub-network on each of the datasets
-#                  # CNN1 HS3D Donor             # CNN1 HS3D Acceptor
-#
-#
-#acc
-#             fold 1   fold2    fold3               fold1     fold2     fold3
-# ALSO
-#            # All Sub-Models HS3D Acceptor             # All Sub-Models HS3D Acceptor
-#
-#
-#
-#   whisk Cnn1 whisk Cnn2   whisk1 whisk2   whisk1 whisk2   whisk1 whisk2   whisk1 whisk2   whisk1 whisk2
-#     fold1           fold2             fold3          fold1           fold2             fold3
-# ALSO
-#           # All Datasets CNN1 Donor          # All Dataset CNN1 Acceptor
-#
-#
-#
-#  whisk HS3D whisk HS3D
-#          fold 1
-# if you train (loss can be switched with accuracy)
-#                   # CNN1 HS3D Donor, Acceptor Loss
-#                   # CNN1 HS3D Acceptor Loss
-#                   # CNN1 HS3D, CE Donor, Acceptor Loss
-#
-
-
-
-
-# # procedure 1 :
-# # take the training and validation predictions of each sub-network,
-# # and turn them from [0.4346744  0.541956] into their corresponding value
-# # so, [0.4346744  0.541956] --> [0 1] --> 1; reshape to have the ith row
-# # of X_train and X_valid for EnsembleSplice to be the prediction
-# # for each submodel for the ith data point. so row i = [pred i_1, pred i_2] where
-# # 1,2,... correspond to indices for the submodels
-# # The shape will be (data_points, num_submodels)
-# # The shape of y_trn will be (data_points, 2)
-# # Looks like this for 2 subnetworks:
-# # [[0 0]
-# #  [1 1]...
-
-# # procedure 2:
-# # take the training and validation predictions of each sub-network, and combine
-# # them into a dataset horizontally, so prediction i for newtwork 1 might look
-# # like [0.4346744  0.541956] and prediction i for network 2 like [0.37601474 0.59733313]
-# # now make the data for EnsembleSplice [[0.37601474 0.59733313], [0.4346744  0.541956]]
-# # for that data i that the sub-models predicted on
-# # the shape will be (data_points, sub_model_count, 2)
-# # Looks like this for 2 subnetworks:
-# # [[[0.6851621  0.28738165]
-# # [0.5835692  0.42628247]]
-# #
-# # [[0.4382874  0.5630167 ]
-# # [0.4609802  0.5340268 ]]
-# procedure = 2
-# X_train = np.hstack([np.expand_dims(elt[1], 1) for elt in model_preds_by_fold])
-# X_valid = np.hstack([np.expand_dims(elt[2], 1) for elt in model_preds_by_fold])
-# row_length = X_train.shape[1]

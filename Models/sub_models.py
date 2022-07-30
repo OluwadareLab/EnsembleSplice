@@ -2,10 +2,7 @@
 # Copyright (c) 2021 Trevor P. Martin. All rights reserved.
 # Distributed under the MIT License.
 # -----------------------------------------------------------------------------
-from Data import encode_data
-# from utils import cross_validation
-from Models import utils
-
+from keras.utils import plot_model
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import Perceptron
@@ -16,25 +13,6 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import copy
-
-# # custom F1 Score Metric
-# def f1score(y_true, y_pred):
-#     squared_difference = tf.square(y_true - y_pred)
-#     return tf.reduce_mean(squared_difference, axis=-1)  `
-#
-# # custom MCC Metric
-# def mcc(y_true, y_pred):
-#     squared_difference = tf.square(y_true - y_pred)
-#     return tf.reduce_mean(squared_difference, axis=-1)
-#
-# def sensitivity(y_true, y_pred):
-#     squared_difference = tf.square(y_true - y_pred)
-#     return tf.reduce_mean(squared_difference, axis=-1)
-#
-# def specificity(y_true, y_pred):
-#     squared_difference = tf.square(y_true - y_pred)
-#     return tf.reduce_mean(squared_difference, axis=-1)
-
 
 class ENSEMBLE(tf.keras.Model):
     @staticmethod
@@ -140,6 +118,7 @@ class CNN01(tf.keras.Model):
                 # tf.keras.metrics.SpecificityAtSensitivity(name='spATsn'),
             ]
         )
+        plot_model(model, to_file='cnn01.png')
         if kwargs["operation"] == "train":
             history = model.fit(
                 x=X_trn,
@@ -164,6 +143,7 @@ class CNN01(tf.keras.Model):
                 ],
                 verbose=1,
             )
+           
         if kwargs["operation"] == "test":
             return model
         return (history, model)
@@ -224,6 +204,7 @@ class CNN02(tf.keras.Model):
                 # tf.keras.metrics.SpecificityAtSensitivity(name='spATsn'),
             ]
         )
+        plot_model(model, to_file='cnn02.png')
         if kwargs["operation"] == "train":
             history = model.fit(
                 x=X_trn,
@@ -298,6 +279,7 @@ class CNN03(tf.keras.Model):
                 # tf.keras.metrics.SpecificityAtSensitivity(name='spATsn'),
             ]
         )
+        plot_model(model, to_file='cnn03.png')
         if kwargs["operation"] == "train":
             history = model.fit(
                 x=X_trn,
@@ -385,6 +367,7 @@ class CNN04(tf.keras.Model):
                 # tf.keras.metrics.SpecificityAtSensitivity(name='spATsn'),
             ]
         )
+        plot_model(model, to_file='cnn04.png')
         if kwargs["operation"] == "train":
             history = model.fit(
                 x=X_trn,
@@ -706,7 +689,128 @@ class DNN04(tf.keras.Model):
                 batch_size=32,
                 epochs=30,
                 validation_data=(X_val, y_val),
-                callbacks=[tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=6, min_delta=0.001, restore_best_weights=True)]
+            )
+        if kwargs["operation"] == "test":
+            return model
+        return (history, model)
+
+class SpliceFinder(tf.keras.Model):
+    @staticmethod
+    def build(rows, X_trn, y_trn, X_val, y_val, kwargs):
+        print(X_trn.shape)
+        model = tf.keras.Sequential()
+        input_shape = (rows, 4)
+        model.add(tf.keras.layers.InputLayer(input_shape=input_shape))
+        model.add(tf.keras.layers.Conv1D(
+            filters=50,
+            kernel_size=9,
+            strides=1,
+            activation="relu",
+            padding="same"
+            )
+        )
+        model.add(tf.keras.layers.Flatten())
+        
+        model.add(tf.keras.layers.Dense(100,activation='relu'))
+    
+        model.add(tf.keras.layers.Dropout(0.3))
+        model.add(tf.keras.layers.Dense(2, activation="sigmoid"))
+
+        adam = tf.keras.optimizers.Adam(lr=1e-4)
+        model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=[tf.keras.metrics.BinaryAccuracy(name='bin_acc'),])
+
+        if kwargs["operation"] == "train":
+            history = model.fit(
+                x=X_trn,
+                y=y_trn,
+                batch_size=40,
+                epochs=50,
+                callbacks=[
+                    tf.keras.callbacks.EarlyStopping(monitor='loss', patience=9, mode='min', min_delta=0.001),
+                ],
+                verbose=1,
+            )
+        # only the callback and validation_data differ here
+        if kwargs["operation"] == "validate":
+            history = model.fit(
+                x=X_trn,
+                y=y_trn,
+                batch_size=40,
+                epochs=50,
+                validation_data=(X_val, y_val),
+                callbacks=[
+                    tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=9,  mode='min', min_delta=0.001),
+                ],
+                verbose=1,
+            )
+        if kwargs["operation"] == "test":
+            return model
+        return (history, model)
+
+class DeepSplicer(tf.keras.Model):
+    @staticmethod
+    def build(rows, X_trn, y_trn, X_val, y_val, kwargs):
+        print(X_trn.shape)
+        model = tf.keras.Sequential()
+        input_shape = (rows, 4)
+        model.add(tf.keras.layers.InputLayer(input_shape=input_shape))
+        model.add(tf.keras.layers.Conv1D(
+            filters=50,
+            kernel_size=9,
+            strides=1,
+            activation="relu",
+            padding="same"
+            )
+        )
+        model.add(tf.keras.layers.Conv1D(
+            filters=50,
+            kernel_size=9,
+            strides=1,
+            activation="relu",
+            padding="same"
+            )
+        )
+        model.add(tf.keras.layers.Conv1D(
+            filters=50,
+            kernel_size=9,
+            strides=1,
+            activation="relu",
+            padding="same"
+            )
+        )
+        model.add(tf.keras.layers.Flatten())
+        
+        model.add(tf.keras.layers.Dense(100,activation='relu'))
+    
+        model.add(tf.keras.layers.Dropout(0.3))
+        model.add(tf.keras.layers.Dense(2, activation="sigmoid"))
+
+        adam = tf.keras.optimizers.Adam(lr=1e-4)
+        model.compile(optimizer=adam, loss='categorical_crossentropy', metrics=[tf.keras.metrics.BinaryAccuracy(name='bin_acc'),])
+
+        if kwargs["operation"] == "train":
+            history = model.fit(
+                x=X_trn,
+                y=y_trn,
+                batch_size=40,
+                epochs=50,
+                callbacks=[
+                    tf.keras.callbacks.EarlyStopping(monitor='loss', patience=9, mode='min', min_delta=0.001),
+                ],
+                verbose=1,
+            )
+        # only the callback and validation_data differ here
+        if kwargs["operation"] == "validate":
+            history = model.fit(
+                x=X_trn,
+                y=y_trn,
+                batch_size=40,
+                epochs=50,
+                validation_data=(X_val, y_val),
+                callbacks=[
+                    tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=9,  mode='min', min_delta=0.001),
+                ],
+                verbose=1,
             )
         if kwargs["operation"] == "test":
             return model

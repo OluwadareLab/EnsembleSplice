@@ -1,8 +1,5 @@
-# EnsembleSplice: Ensemble Deep Learning for Splice Site Prediction
 > Code for the paper _EnsembleSplice: Ensemble Deep Learning for Splice Site Prediction_
-
 # EnsembleSplice: Ensemble Deep Learning for Splice Site Prediction
-
 
 
 **OluwadareLab,**
@@ -31,22 +28,21 @@
 **1.	Build Instruction:**
 -----------------------------------------------------------	
 
-CNNSplice can be run in a Docker-containerized environment locally on users computer. Before cloning this repository and attempting to build, the [Docker engine](https://docs.docker.com/engine/install/), If you are new to docker [here is a quick docker tutorial for beginners](https://docker-curriculum.com/). <br> 
+EnsembleSplice can be run in a Docker-containerized environment locally on users computer. Before cloning this repository and attempting to build, the [Docker engine](https://docs.docker.com/engine/install/), If you are new to docker [here is a quick docker tutorial for beginners](https://docker-curriculum.com/). <br> 
 To install and build TADMaster follow these steps.
 
-1. Clone this repository locally using the command `git clone https://github.com/OluwadareLab/CNNSplice.git`.
-2. Pull the CNNSplice docker image from docker hub using the command `docker pull oluwadarelab/cnnsplice:latest`. This may take a few minutes. Once finished, check that the image was sucessfully pulled using `docker image ls`.
+1. Clone this repository locally using the command `git clone https://github.com/OluwadareLab/EnsembleSplice.git`.
+2. Pull the CNNSplice docker image from docker hub using the command `docker pull oluwadarelab/ensemblesplice:latest`. This may take a few minutes. Once finished, check that the image was sucessfully pulled using `docker image ls`.
 3. Run the CNNSplice container and mount the present working directory to the container using `docker run -v ${PWD}:${PWD}  -p 8050:8050 -it oluwadarelab/cnnsplice`.
 4. `cd` to your file directory.
 
-Exciting! You can now access CNNSplice locally.
+Exciting! You can now access EnsembleSplice locally.
 
 
 **2.	Dependencies:**
 -----------------------------------------------------------
-**Skip this step if you followed the Docker instruction Above** <br> 
-CNNSplice is developed in <i>Python3</i>. All dependencies are included in the Docker environment. We have attached the requirement file for the list of dependencies. For local install of dependencies from the <i>requirement.txt</i> file for virtual environment usage, use command `pip install -r requirement.txt` from the current working directory.
-* Our constructed dataset permits a **Sequence Length of 400**
+We have attached the requirement file for the list of dependencies. For local install of dependencies from the <i>requirement.txt</i> file for virtual environment usage, use command `pip install -r requirement.txt` from the current working directory.
+
 
 
 **3.	Training Usage:**
@@ -80,7 +76,6 @@ The outputs of testing includes: <br />
 -----------------------------------------------------------
 * Dataset sequence length is 400.
 * Ensure you have a log directory for text file storage
-* Genomic sequence input data should be transfomed using one-hot encoding.
 
 
 

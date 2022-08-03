@@ -11,7 +11,7 @@
 		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department of Mathematics <br />
 		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oberlin College, Oberlin, OH <br />
 		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email: trevormartin4321@gmail.com <br /><br />
-     <br /><br />
+     
 		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Victor Akpokiro<br />
 		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department of Computer Science <br />
 		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;University of Colorado, Colorado Springs <br />
@@ -25,33 +25,29 @@
     
 --------------------------------------------------------------------	
 
-**1.	Build Instruction:**
------------------------------------------------------------	
 
-EnsembleSplice can be run in a Docker-containerized environment locally on users computer. Before cloning this repository and attempting to build, the [Docker engine](https://docs.docker.com/engine/install/), If you are new to docker [here is a quick docker tutorial for beginners](https://docker-curriculum.com/). <br> 
-To install and build TADMaster follow these steps.
-
-1. Clone this repository locally using the command `git clone https://github.com/OluwadareLab/EnsembleSplice.git`.
-2. Pull the CNNSplice docker image from docker hub using the command `docker pull oluwadarelab/ensemblesplice:latest`. This may take a few minutes. Once finished, check that the image was sucessfully pulled using `docker image ls`.
-3. Run the CNNSplice container and mount the present working directory to the container using `docker run -v ${PWD}:${PWD}  -p 8050:8050 -it oluwadarelab/cnnsplice`.
-4. `cd` to your file directory.
-
-Exciting! You can now access EnsembleSplice locally.
-
-
-**2.	Dependencies:**
+**1.	Dependencies:**
 -----------------------------------------------------------
 We have attached the requirement file for the list of dependencies. For local install of dependencies from the <i>requirement.txt</i> file for virtual environment usage, use command `pip install -r requirement.txt` from the current working directory.
 
 
+**2.	Validation :**
+-----------------------------------------------------------
+> _EnsembleSplice Validation: To perforn validation training_
+Usage: To train, type in the terminal `python3 exec.py [--train] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
+For Example: `python exec.py -validate --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --hs3d_bal --esplice" ` <br />
 
-**3.	Training Usage:**
+* **Outputs**: <br />
+The outputs of training includes: <br />
+	* .h5: The deepslicer model file.
+	* .txt: The output files (.txt) containig the evaluation metrics results is stored in the log directory.
+
+
+**3.	Training :**
 ----------------------------------------------------------- 
-Usage: To train, type in the terminal `python train.py -n "model_name" -m mode ` <br />
-For Example: `python train.py -n "output_name" -m "balanced" ` <br />
-* **Arguments**: <br />	
-	* output_name: A user specified string for output naming convention <br />
-	* mode: A string to specify either balanced or imbalanced input dataset, i.e ("balanced" or "imbalanced")<br />
+> _EnsembleSplice Training: To perforn training and saving_
+Usage: To train, type in the terminal `python3 exec.py [--train] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
+For Example: `python exec.py -train --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --hs2 --esplice" ` <br />
 
 * **Outputs**: <br />
 The outputs of training includes: <br />
@@ -59,13 +55,12 @@ The outputs of training includes: <br />
 	* .txt: The output files (.txt) containig the evaluation metrics results is stored in the log directory.	
                           		
                            
-**4.	Testing Usage:**
+**4.	Testing :**
 -----------------------------------------------------------
-For Testing, use `python3 exec.py [--train, --test, --validate] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
-For Example: `python exec.py -validate --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --hs3d_bal --esplice` <br />
-* **Arguments**: <br />	
-	* output_name: A user specified string for output naming convention <br />
-	* mode: A string to specify either balanced or imbalanced input dataset, i.e ("balanced" or "imbalanced")<br />
+> _EnsembleSplice Testing: To perforn testing_
+For Testing, use `python3 exec.py [--test,] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
+For Example: `python exec.py -test --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --ar --esplice` <br />
+ither balanced or imbalanced input dataset, i.e ("balanced" or "imbalanced")<br />
 
 * **Outputs**: <br />
 The outputs of testing includes: <br />

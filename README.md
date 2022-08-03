@@ -61,8 +61,8 @@ The outputs of training includes: <br />
                            
 **4.	Testing Usage:**
 -----------------------------------------------------------
-For Testing, use `python test.py -n "output_name" -m mode("balanced" or "imbalanced") ` <br />
-For Example: `python test.py -n "output_name" -m "balanced" ` <br />
+For Testing, use `python3 exec.py [--train, --test, --validate] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
+For Example: `python exec.py -validate --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --hs3d_bal --esplice` <br />
 * **Arguments**: <br />	
 	* output_name: A user specified string for output naming convention <br />
 	* mode: A string to specify either balanced or imbalanced input dataset, i.e ("balanced" or "imbalanced")<br />
@@ -74,7 +74,6 @@ The outputs of testing includes: <br />
 
 **5.	Note:**
 -----------------------------------------------------------
-* Dataset sequence length is 400.
 * Ensure you have a log directory for text file storage
 
 

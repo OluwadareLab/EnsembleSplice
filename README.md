@@ -27,7 +27,9 @@
 
 **1.	Dependencies:**
 -----------------------------------------------------------
-We have attached the requirement file for the list of dependencies. For local install of dependencies from the <i>requirement.txt</i> file for virtual environment usage, use command `pip install -r requirement.txt` from the current working directory.
+We have attached the requirement file for the list of dependencies. For local install of dependencies from the <i>requirement.txt</i> file for virtual environment usage, use command `pip install -r requirement.txt` from the current working directory. 
+
+This project is compatible with Anaconda environments.
 
 
 **2.	Validation :**
@@ -55,7 +57,7 @@ The outputs of training includes: <br />
 	* .h5: The deepslicer model file contained in ./Models/TrainedModels/
 	* .txt: The output files (.txt) containig the evaluation metrics results is stored in the log directory.	
 
-When EnsembleSplice is run for Training, two things occur. First, a file with the sub-networks, splice sites, dataset, and other relevant information in its name is created. This is a text file containing dictionaries of output results. To have the results printed in the terminal or on Colab, move ENS_Temp_Run.py into ./Logs/ and run it. You can also created a new folder and move the log files and ENS_Temp_Run.py into this folder and then run ENS_Temp_Run.py. Second, the trained sub-networks and their weights are added to ./Models/TrainedModels/
+When EnsembleSplice is run for Training, two things occur. First, a file with the sub-networks, splice sites, dataset, and other relevant information in its name is created. This is a text file containing dictionaries of output results. To have the results printed in the terminal or on Colab, move ENS_Temp_Run.py into ./Logs/ and run it. You can also create a new folder and move the log files and ENS_Temp_Run.py into this folder and then run ENS_Temp_Run.py. Second, the trained sub-networks and their weights are added to ./Models/TrainedModels/
                           		
                            
 **4.	Testing :**

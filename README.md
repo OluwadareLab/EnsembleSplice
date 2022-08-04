@@ -1,5 +1,5 @@
-> Code for the paper _EnsembleSplice: Ensemble Deep Learning for Splice Site Prediction_
-# EnsembleSplice: Ensemble Deep Learning for Splice Site Prediction
+> Code for the paper _EnsembleSplice: Ensemble Deep Learning Model for Splice Site Prediction_
+# EnsembleSplice: Ensemble Deep Learning Model for Splice Site Prediction
 
 
 **OluwadareLab,**

@@ -32,7 +32,7 @@ We have attached the requirement file for the list of dependencies. For local in
 
 **2.	Validation :**
 -----------------------------------------------------------
-> _EnsembleSplice Validation: To perforn validation training_
+> _EnsembleSplice Validation: To perform validation training_
 Usage: To train, type in the terminal `python3 exec.py [--train] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
 For Example: `python exec.py -validate --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --hs3d_bal --esplice" ` <br />
 
@@ -44,7 +44,7 @@ The outputs of training includes: <br />
 
 **3.	Training :**
 ----------------------------------------------------------- 
-> _EnsembleSplice Training: To perforn training and saving_
+> _EnsembleSplice Training: To perform training and saving_
 Usage: To train, type in the terminal `python3 exec.py [--train] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
 For Example: `python exec.py -train --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --hs2 --esplice" ` <br />
 
@@ -56,7 +56,7 @@ The outputs of training includes: <br />
                            
 **4.	Testing :**
 -----------------------------------------------------------
-> _EnsembleSplice Testing: To perforn testing_
+> _EnsembleSplice Testing: To perform testing_
 For Testing, use `python3 exec.py [--test,] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
 For Example: `python exec.py -test --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --ar --esplice` <br />
 ither balanced or imbalanced input dataset, i.e ("balanced" or "imbalanced")<br />

@@ -33,7 +33,7 @@ This project is compatible with Anaconda environments.
 
 When EnsembleSplice is run for Validation, Training, or Testing two things occur. First, a file with the sub-networks, splice sites, dataset, and other relevant information in its name is created. This is a text file containing dictionaries of output results. To have the results printed in the terminal or on Colab, move ENS_Temp_Run.py into ./Logs/ and run it. You can also create a new folder and move the log files and ENS_Temp_Run.py into this folder and then run ENS_Temp_Run.py. Second, the trained sub-networks and their weights are added to ./Models/TrainedModels/. 
 
-To run the ensemble, make sure the argument `--esplice` is used. When this argument is not used, the sub-networks specified are the only models actually run. 
+To run the actual ensemble, make sure the argument `--esplice` is used. The specified sub-networks are the only models that run when this argument is not used, and results outputs are produced for each submodel. 
 
 
 **2.	Validation :**

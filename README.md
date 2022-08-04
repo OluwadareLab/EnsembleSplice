@@ -31,11 +31,15 @@ We have attached the requirement file for the list of dependencies. For local in
 
 This project is compatible with Anaconda environments.
 
+When EnsembleSplice is run for Validation, Training, or Testing two things occur. First, a file with the sub-networks, splice sites, dataset, and other relevant information in its name is created. This is a text file containing dictionaries of output results. To have the results printed in the terminal or on Colab, move ENS_Temp_Run.py into ./Logs/ and run it. You can also create a new folder and move the log files and ENS_Temp_Run.py into this folder and then run ENS_Temp_Run.py. Second, the trained sub-networks and their weights are added to ./Models/TrainedModels/. 
+
+To run the ensemble, make sure the argument `--esplice` is used. When this argument is not used, the sub-networks specified are the only models actually run. 
+
 
 **2.	Validation :**
 -----------------------------------------------------------
 > _EnsembleSplice Validation: To perform validation training_
-Usage: To train, type in the terminal `python3 exec.py [--train] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
+Usage: To train, type in the terminal `python3 exec.py [--train] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [--esplice] ` <br />
 For Example: `python exec.py -validate --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --hs3d_bal --esplice" ` <br />
 
 * **Outputs**: <br />
@@ -47,7 +51,7 @@ The outputs of training includes: <br />
 **3.	Training :**
 ----------------------------------------------------------- 
 > _EnsembleSplice Training: To perform training and saving_
-Usage: To train, type in the terminal `python3 exec.py [--train] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br><br>
+Usage: To train, type in the terminal `python3 exec.py [--train] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [--esplice] ` <br><br>
 For Example: `python exec.py -train --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --hs2 --esplice" ` <br />
 
 See `exec.py` for more details. 
@@ -56,14 +60,12 @@ See `exec.py` for more details.
 The outputs of training includes: <br />
 	* .h5: The deepslicer model file contained in ./Models/TrainedModels/
 	* .txt: The output files (.txt) containig the evaluation metrics results is stored in the log directory.	
-
-When EnsembleSplice is run for Training, two things occur. First, a file with the sub-networks, splice sites, dataset, and other relevant information in its name is created. This is a text file containing dictionaries of output results. To have the results printed in the terminal or on Colab, move ENS_Temp_Run.py into ./Logs/ and run it. You can also create a new folder and move the log files and ENS_Temp_Run.py into this folder and then run ENS_Temp_Run.py. Second, the trained sub-networks and their weights are added to ./Models/TrainedModels/
                           		
                            
 **4.	Testing :**
 -----------------------------------------------------------
 > _EnsembleSplice Testing: To perform testing_
-For Testing, use `python3 exec.py [--test,] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [esplice] ` <br />
+For Testing, use `python3 exec.py [--test,] [--donor, --acceptor] [--cnn1, --cnn2, --cnn3, --cnn4, --dnn1, --dnn2, --dnn3, --dnn4] [--hs3d_bal, --ar, --hs2] [--esplice] ` <br />
 For Example: `python exec.py -test --donor --dnn1 --dnn2 --dnn3 --dnn4 --cnn1 --cnn2 --cnn3 --cnn4 --ar --esplice` <br />
 ither balanced or imbalanced input dataset, i.e ("balanced" or "imbalanced")<br />
 
